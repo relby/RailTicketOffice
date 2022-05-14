@@ -21,6 +21,10 @@ void Train::CreateCars(uint16_t sidyachiy, uint16_t platskart, uint16_t kupe, ui
     }
 }
 
+uint16_t Train::GetId() {
+    return id;
+}
+
 Car* Train::GetCar(uint16_t idOfCar) {
     if (idOfCar > cars.size() || idOfCar == 0) {
         return nullptr;

@@ -10,24 +10,9 @@ SeatType Seat::GetType() {
     return type;
 }
 
-bool Seat::IsBought() {
-    return isBought;
-}
-
-bool Seat::IsReserved() {
-    return isReserved;
-}
-
 // void Seat::Reserve(std::string buyer) {
 //     isReserved = true;
 // }
-
-Ticket Seat::BuyTicket(std::tm date, std::string buyer) {
-    Ticket t = Ticket(buyer, date, "123123");
-    owner = buyer;
-    isBought = true;
-    return t;
-}
 
 void Seat::Print() {
     std::cout << "Место #" << id << ' ' << seatTypeToString(type) << '\n';

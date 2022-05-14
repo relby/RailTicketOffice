@@ -45,6 +45,13 @@ Car::Car(uint16_t id, CarType type) : id(id), type(type) {
     }
 }
 
+uint16_t Car::GetId() {
+    return id;
+}
+CarType Car::GetType() {
+    return type;
+}
+
 Seat* Car::GetSeat(uint16_t idOfSeat) {
     if (idOfSeat > seats.size() || idOfSeat == 0) {
         return nullptr;

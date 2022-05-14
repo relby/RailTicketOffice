@@ -1,4 +1,5 @@
 #pragma once
+#include <stdint.h>
 #include <vector>
 #include "Car.h"
 #include "Types.h"
@@ -12,6 +13,7 @@ public:
 
     void CreateCars(uint16_t sidyachiy, uint16_t platskart, uint16_t kupe, uint16_t cb);
     virtual TrainType GetType() = 0;
+    uint16_t GetId();
     Car* GetCar(uint16_t idOfCar);
     void Print();
     virtual ~Train();

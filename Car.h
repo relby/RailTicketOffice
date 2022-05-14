@@ -13,6 +13,8 @@ private:
 public:
     Car(uint16_t id, CarType type);
 
+    uint16_t GetId();
+    CarType GetType();
     Seat* GetSeat(uint16_t idOfSeat);
     void Print();
     ~Car();

@@ -1,8 +1,30 @@
+#include <stdint.h>
 #include <string>
 #include <ctime>
 #include <iostream>
+#include <stdint.h>
+#include <utility>
 #include "Types.h"
 
 std::string carTypeToString(CarType type);
 std::string seatTypeToString(SeatType type);
+std::string trainTypeToString(TrainType type);
+
 std::tm* parseDate(std::string);
+uint16_t chooseOperation();
+TrainType chooseTrain();
+bool checkEqualTM(std::tm, std::tm);
+
+std::string padTo(std::string str, size_t num, char paddingChar);
+std::string tmToString(std::tm tm);
+std::pair<std::string, std::string> getDateRange();
+
+std::string generateTicketDetails(TrainType trainType, uint16_t traindId, CarType carType, uint16_t carId, uint16_t seatId /*SeatType seatType*/ );
+
+template <typename T>
+T input(std::string message) {
+    std::cout << message << '\n';
+    T input;
+    std::cin >> input;
+    return input;
+}
