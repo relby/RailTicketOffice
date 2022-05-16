@@ -27,4 +27,5 @@ public:
     void CheckAvailableSeats();
     std::vector<Ticket*> GetTicketsByName();
     std::vector<Ticket*> CancelTickets();
+    ~RailTicketOffice();
 };

@@ -191,3 +191,8 @@ std::vector<Ticket*> RailTicketOffice::CancelTickets() {
     }
     return out;
 }
+RailTicketOffice::~RailTicketOffice() {
+    for (Ticket* ticket : tickets) {
+        delete ticket;
+    }
+}
