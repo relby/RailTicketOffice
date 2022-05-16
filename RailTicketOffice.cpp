@@ -260,12 +260,14 @@ int main() {
                     reservedTickets.push_back(ticket);
                 }
             }
+            uint16_t sumPrice = 0;
             cout << tickets[0]->GetOwner() << " has " << tickets.size() << " tickets:\n";
             if (!boughtTickets.empty()) {
                 cout << "  Your bought tickets:\n";
                 for (size_t i = 0; i < boughtTickets.size(); i++) {
                     Ticket* ticket = tickets[i];
                     cout << "    #" << i+1 << " " << ticket->GetPrice()<< "Р " << tmToString(ticket->GetDate()) << " " << ticket->GetDetails() << '\n';
+                    sumPrice += ticket->GetPrice();
                 }
             }
             if (!reservedTickets.empty()) {
@@ -273,8 +275,10 @@ int main() {
                 for (size_t i = 0; i < reservedTickets.size(); i++) {
                     Ticket* ticket = tickets[i];
                     cout << "    #" << i+1 << " " << ticket->GetPrice()<< "Р " << tmToString(ticket->GetDate()) << " " << ticket->GetDetails() << '\n';
+                    sumPrice += ticket->GetPrice();
                 }
             }
+            cout << "Total price: " << sumPrice << '\n';
             break;
         }
         case 4: { // Cancel Tickets
