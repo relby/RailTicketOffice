@@ -1,6 +1,4 @@
 #include "Utils.h"
-#include <string>
-
 
 std::string carTypeToString(CarType type) {
     switch (type) {
@@ -74,28 +72,43 @@ std::tm* parseDate(std::string date_str) {
 
 uint16_t chooseOperation() {
     uint16_t input = -1;
-    std::cout << "What do you want to do?\n";
+    std::cout << "Choose an operation:\n";
     std::cout << "[0]: Buy Tickets\n";
     std::cout << "[1]: Reserve Tickets\n";
     std::cout << "[2]: Check Seat\n";
     std::cout << "[3]: Get Tickets by name\n";
     std::cout << "[4]: Cancel Tickets\n";
     std::cout << "[5]: Quit\n";
-    while (!(input >= 0 && input <= 5)) {
+    while (input > 5) {
         std::cin >> input;
     }
     return input;
 }
-TrainType chooseTrain() {
+TrainType chooseTrainType() {
     uint16_t input = -1;
-    std::cout << "Choose train Type\n";
+    std::cout << "Choose train type:\n";
     std::cout << "[" << LastochkaType << "]" << ": Lastochka\n";
     std::cout << "[" << FirmenniyType << "]" << ": Firmenniy\n";
     std::cout << "[" << SkoriyType << "]" << ": Skoriy\n";
-    while (!(input >= 0 && input <= 2)) {
+    while (input > SkoriyType) {
         std::cin >> input;
     }
     return (TrainType)input;
+}
+CarType chooseCarType(std::vector<CarType> carTypes) {
+    uint16_t input = -1;
+    assert(!carTypes.empty());
+    if (carTypes.size() == 1) return carTypes[0];
+
+    std::cout << "Choose car type:\n";
+    for (size_t i = 0; i < carTypes.size(); i++) {
+        CarType type = carTypes[i];
+        std::cout << "[" << i << "]" << ": " << carTypeToString(type) << "\n";
+    }
+    while (input >= carTypes.size()) {
+        std::cin >> input;
+    }
+    return carTypes[input];
 }
 
 bool checkEqualTM(std::tm tm1, std::tm tm2) {
@@ -146,6 +159,7 @@ uint16_t generatePrice(CarType carType, SeatType seatType) {
         } else if (seatType == Lower) {
             return 2000;
         }
+        return -1;
     }
     case Kupe: {
         if (seatType == Upper) {
@@ -153,9 +167,10 @@ uint16_t generatePrice(CarType carType, SeatType seatType) {
         } else if (seatType == Lower) {
             return 4000;
         }
+        return -1;
     }
     case CB:
         return 7000;
     }
-    return 10000000000;
+    return -1;
 }

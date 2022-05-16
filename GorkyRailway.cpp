@@ -1,6 +1,4 @@
 #include "GorkyRailway.h"
-#include <stdint.h>
-#include <vector>
 
 GorkyRailway::GorkyRailway(uint16_t numberOfLastochka, uint16_t numberOfFirmenniy, uint16_t numberOfSkoriy) : trains(std::vector<Train*>()) {
     for (uint16_t i = 0; i < numberOfLastochka; i++) {
@@ -14,13 +12,14 @@ GorkyRailway::GorkyRailway(uint16_t numberOfLastochka, uint16_t numberOfFirmenni
     }
 }
 
-Train* GorkyRailway::GetTrain(TrainType trainType) {
+std::vector<Train*> GorkyRailway::GetTrainsOfType(TrainType trainType) {
+    std::vector<Train*> out;
     for (Train* train : trains) {
         if (train->GetType() == trainType) {
-            return train;
+            out.push_back(train);
         }
     }
-    return nullptr;
+    return out;
 }
 
 GorkyRailway::~GorkyRailway() {

@@ -1,4 +1,6 @@
 #pragma once
+#include <stdint.h>
+#include <vector>
 #include "Trains.h"
 #include "Types.h"
 
@@ -7,6 +9,6 @@ private:
     std::vector<Train*> trains;
 public:
     GorkyRailway(uint16_t numberOfLastochka, uint16_t numberOfFirmenniy, uint16_t numberOfSkoriy);
-    Train* GetTrain(TrainType trainType);
+    std::vector<Train*> GetTrainsOfType(TrainType trainType);
     ~GorkyRailway();
 };

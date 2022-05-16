@@ -15,7 +15,7 @@ public:
 
     uint16_t GetId();
     CarType GetType();
-    Seat* GetSeat(uint16_t idOfSeat);
+    std::vector<Seat*> GetSeats();
     void Print();
     ~Car();
 };

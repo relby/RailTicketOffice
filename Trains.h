@@ -1,6 +1,8 @@
 #pragma once
 #include <stdint.h>
 #include <vector>
+#include <iostream>
+#include <algorithm>
 #include "Car.h"
 #include "Types.h"
 
@@ -12,9 +14,11 @@ public:
     Train(uint16_t id);
 
     void CreateCars(uint16_t sidyachiy, uint16_t platskart, uint16_t kupe, uint16_t cb);
+    std::vector<CarType> GetCarsTypes();
+    std::vector<Car*> GetCarsOfType(CarType carType);
     virtual TrainType GetType() = 0;
     uint16_t GetId();
-    Car* GetCar(uint16_t idOfCar);
+    std::vector<Car*> GetCars();
     void Print();
     virtual ~Train();
 };

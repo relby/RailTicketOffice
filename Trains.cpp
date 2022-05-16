@@ -1,6 +1,5 @@
 #include "Trains.h"
 #include "Types.h"
-#include <iostream>
 
 Train::Train(uint16_t id) : id(id) {}
 
@@ -21,15 +20,32 @@ void Train::CreateCars(uint16_t sidyachiy, uint16_t platskart, uint16_t kupe, ui
     }
 }
 
+std::vector<CarType> Train::GetCarsTypes() {
+    std::vector<CarType> out;
+    for (Car* car : cars) {
+        if (std::find(out.begin(), out.end(), car->GetType()) == out.end()) {
+            out.push_back(car->GetType());
+        }
+    }
+    return out;
+}
+
+std::vector<Car*> Train::GetCarsOfType(CarType carType) {
+    std::vector<Car*> out;
+    for (Car* car : cars) {
+        if (car->GetType() == carType) {
+            out.push_back(car);
+        }
+    }
+    return out;
+}
+
 uint16_t Train::GetId() {
     return id;
 }
 
-Car* Train::GetCar(uint16_t idOfCar) {
-    if (idOfCar > cars.size() || idOfCar == 0) {
-        return nullptr;
-    }
-    return cars[idOfCar - 1];
+std::vector<Car*> Train::GetCars() {
+    return cars;
 };
 
 void Train::Print() {

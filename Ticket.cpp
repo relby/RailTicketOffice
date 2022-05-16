@@ -1,5 +1,4 @@
 #include "Ticket.h"
-#include <stdint.h>
 
 Ticket::Ticket() {}
 Ticket::Ticket(TicketType type, std::tm date, std::string buyer, Train* train, Car* car, Seat* seat) : type(type), date(date), owner(buyer), train(train), car(car), seat(seat) {

@@ -8,8 +8,8 @@
 class Ticket {
 private:
     TicketType type;
-    std::string owner;
     std::tm date;
+    std::string owner;
     Train* train;
     Car* car;
     Seat* seat;

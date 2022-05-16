@@ -23,13 +23,60 @@ private:
         }
         return nullptr;
     }
+
+    Train* chooseTrain(std::vector<Train*> trains) {
+        std::cout << "Available Trains:\n";
+        for (size_t i = 0; i < trains.size(); i++) {
+            Train* train = trains[i];
+            std::cout << "[" << i << "]: #" << train->GetId() << " " << trainTypeToString(train->GetType()) << '\n';
+        }
+        uint16_t input = -1;
+        while (input >= trains.size()) {
+            std::cin >> input;
+        }
+        return trains[input];
+    }
+
+    Car* chooseCar(std::vector<Car*> cars) {
+        std::cout << "Available Cars:\n";
+        for (size_t i = 0; i < cars.size(); i++) {
+            Car* car = cars[i];
+            std::cout << "[" << i << "]: #" << car->GetId() << " " << carTypeToString(car->GetType()) << '\n';
+        }
+        uint16_t input = -1;
+        while (input >= cars.size()) {
+            std::cin >> input;
+        }
+        return cars[input];
+    }
+
+    Seat* chooseSeat(std::tm date, Train* train, Car* car, std::vector<Seat*> seats) {
+        std::cout << "Available Seats:\n";
+        std::vector<Seat*> available_seats;
+        for (Seat* seat : seats) {
+            if (CheckTicket(date, train, car, seat) == nullptr) { // If there is no ticket
+                available_seats.push_back(seat);
+            }
+        }
+        for (size_t i = 0; i < available_seats.size(); i++) {
+            Seat* seat = available_seats[i];
+            std::cout << "[" << i << "]: #" << seat->GetId() << " " << seatTypeToString(seat->GetType()) << " " << generatePrice(car->GetType(), seat->GetType()) << "P\n";
+        }
+        uint16_t input = -1;
+        while (input >= available_seats.size()) {
+            std::cin >> input;
+        }
+        return available_seats[input];
+    }
+
 public:
     RailTicketOffice() : railway(GorkyRailway(2, 2, 2)), tickets(std::vector<Ticket*>()) {}
 
-    std::vector<Ticket*> BuyTickets(uint16_t ticketsAmount) {
+    std::vector<Ticket*> BuyTickets() {
         /*
             date - should be a string from "01/01" to "31/12"
         */
+        uint16_t ticketsAmount = input<uint16_t>("Enter amount of tickets that you want to buy");
         std::vector<Ticket*> out;
         for (uint16_t i = 0; i < ticketsAmount; i++) {
             std::cout << "Ticket #" << i + 1 << '\n';
@@ -42,27 +89,21 @@ public:
                 dateStr = input<std::string>("Enter the date");
                 date = parseDate(dateStr);
             }
-            TrainType trainType = chooseTrain();
-            Train* train = railway.GetTrain(trainType);
-            while (train == nullptr) {
-                std::cout << "THERE IS NO TRAIN OF THIS TYPE\n";
-                trainType = chooseTrain();
-                train = railway.GetTrain(trainType);
-            }
-            uint16_t idOfCar = input<uint16_t>("Enter id of the car");
-            Car* car = train->GetCar(idOfCar);
-            while (car == nullptr) {
-                std::cout << "THERE IS NO CAR WITH THIS ID\n";
-                idOfCar = input<uint16_t>("Enter id of the car");
-                car = train->GetCar(idOfCar);
-            }
-            uint16_t idOfSeat = input<uint16_t>("Enter id of the seat");
-            Seat* seat = car->GetSeat(idOfSeat);
-            while (seat == nullptr) {
-                std::cout << "THERE IS NO SEAT WITH THIS ID\n";
-                idOfSeat = input<uint16_t>("Enter id of the seat");
-                seat = car->GetSeat(idOfSeat);
-            }
+            TrainType trainType = chooseTrainType();
+            std::vector<Train*> trains = railway.GetTrainsOfType(trainType);
+            assert(!trains.empty());
+            Train* train = chooseTrain(trains);
+
+            CarType carType = chooseCarType(train->GetCarsTypes());
+
+            std::vector<Car*> cars = train->GetCarsOfType(carType);
+            assert(!cars.empty());
+
+            Car* car = chooseCar(cars);
+
+            std::vector<Seat*> seats = car->GetSeats();
+            assert(!seats.empty());
+            Seat* seat = chooseSeat(*date, train, car, seats);
             Ticket* ticket = new Ticket(BuyTicket, *date, buyerName, train, car, seat);
             tickets.push_back(ticket);
             out.push_back(ticket);
@@ -70,7 +111,8 @@ public:
         return out;
     }
 
-    std::vector<Ticket*> ReserveTickets(uint16_t ticketsAmount) {
+    std::vector<Ticket*> ReserveTickets() {
+        uint16_t ticketsAmount = input<uint16_t>("Enter amount of tickets that you want to reserve");
         std::vector<Ticket*> out;
         for (uint16_t i = 0; i < ticketsAmount; i++) {
             std::cout << "Ticket #" << i + 1 << '\n';
@@ -83,27 +125,21 @@ public:
                 dateStr = input<std::string>("Enter the date");
                 date = parseDate(dateStr);
             }
-            TrainType trainType = chooseTrain();
-            Train* train = railway.GetTrain(trainType);
-            while (train == nullptr) {
-                std::cout << "THERE IS NO TRAIN OF THIS TYPE\n";
-                trainType = chooseTrain();
-                train = railway.GetTrain(trainType);
-            }
-            uint16_t idOfCar = input<uint16_t>("Enter id of the car");
-            Car* car = train->GetCar(idOfCar);
-            while (car == nullptr) {
-                std::cout << "THERE IS NO CAR WITH THIS ID\n";
-                idOfCar = input<uint16_t>("Enter id of the car");
-                car = train->GetCar(idOfCar);
-            }
-            uint16_t idOfSeat = input<uint16_t>("Enter id of the seat");
-            Seat* seat = car->GetSeat(idOfSeat);
-            while (seat == nullptr) {
-                std::cout << "THERE IS NO SEAT WITH THIS ID\n";
-                idOfSeat = input<uint16_t>("Enter id of the seat");
-                seat = car->GetSeat(idOfSeat);
-            }
+            TrainType trainType = chooseTrainType();
+            std::vector<Train*> trains = railway.GetTrainsOfType(trainType);
+            assert(!trains.empty());
+            Train* train = chooseTrain(trains);
+
+            CarType carType = chooseCarType(train->GetCarsTypes());
+
+            std::vector<Car*> cars = train->GetCarsOfType(carType);
+            assert(!cars.empty());
+
+            Car* car = chooseCar(cars);
+
+            std::vector<Seat*> seats = car->GetSeats();
+            assert(!seats.empty());
+            Seat* seat = chooseSeat(*date, train, car, seats);
             Ticket* ticket = new Ticket(ReserveTicket, *date, buyerName, train, car, seat);
             tickets.push_back(ticket);
             out.push_back(ticket);
@@ -111,7 +147,7 @@ public:
         return out;
     }
 
-    Ticket* CheckSeat() {
+    void CheckAvailableSeats() {
         std::string dateStr = input<std::string>("Enter the date");
         std::tm* date = parseDate(dateStr);
         while (date == nullptr) {
@@ -120,31 +156,34 @@ public:
             dateStr = input<std::string>("Enter the date");
             date = parseDate(dateStr);
         }
-        TrainType trainType = chooseTrain();
-        Train* train = railway.GetTrain(trainType);
-        while (train == nullptr) {
-            std::cout << "THERE IS NO TRAIN OF THIS TYPE\n";
-            trainType = chooseTrain();
-            train = railway.GetTrain(trainType);
+        TrainType trainType = chooseTrainType();
+        std::vector<Train*> trains = railway.GetTrainsOfType(trainType);
+        assert(!trains.empty());
+        Train* train = chooseTrain(trains);
+        CarType carType = chooseCarType(train->GetCarsTypes());
+
+        std::vector<Car*> cars = train->GetCarsOfType(carType);
+        assert(!cars.empty());
+
+        Car* car = chooseCar(cars);
+
+        std::vector<Seat*> seats = car->GetSeats();
+        assert(!seats.empty());
+        std::vector<Seat*> available_seats;
+        std::cout << "Available seats:\n";
+        for (Seat* seat : seats) {
+            if (CheckTicket(*date, train, car, seat) == nullptr) { // If there is no ticket
+                available_seats.push_back(seat);
+            }
         }
-        uint16_t idOfCar = input<uint16_t>("Enter id of the car");
-        Car* car = train->GetCar(idOfCar);
-        while (car == nullptr) {
-            std::cout << "THERE IS NO CAR WITH THIS ID\n";
-            idOfCar = input<uint16_t>("Enter id of the car");
-            car = train->GetCar(idOfCar);
+        for (size_t i = 0; i < available_seats.size(); i++) {
+            Seat* seat = available_seats[i];
+            std::cout << "[" << i << "]: #" << seat->GetId() << " " << seatTypeToString(seat->GetType()) << " " << generatePrice(car->GetType(), seat->GetType()) << "P\n";
         }
-        uint16_t idOfSeat = input<uint16_t>("Enter id of the seat");
-        Seat* seat = car->GetSeat(idOfSeat);
-        while (seat == nullptr) {
-            std::cout << "THERE IS NO SEAT WITH THIS ID\n";
-            idOfSeat = input<uint16_t>("Enter id of the seat");
-            seat = car->GetSeat(idOfSeat);
-        }
-        return CheckTicket(*date, train, car, seat);
     }
 
-    std::vector<Ticket*> GetTicketsByName(std::string buyerName) {
+    std::vector<Ticket*> GetTicketsByName() {
+        std::string buyerName = input<std::string>("Enter your name");
         std::vector<Ticket*> out;
         for (auto ticket : tickets) {
             if (ticket->GetOwner() == buyerName) {
@@ -154,7 +193,8 @@ public:
         return out;
     }
 
-    std::vector<Ticket*> CancelTickets(std::string buyerName) {
+    std::vector<Ticket*> CancelTickets() {
+        std::string buyerName = input<std::string>("Enter your name");
         std::vector<Ticket*> out;
         for (auto it = tickets.begin(); it != tickets.end(); ) {
             if ((*it)->GetOwner() == buyerName) {
@@ -177,8 +217,7 @@ int main() {
         uint16_t operation = chooseOperation();
         switch (operation) {
         case 0: { // Buy Tickets
-            uint16_t ticketsAmount = input<uint16_t>("Enter amount of tickets that you want to buy");
-            vector<Ticket*> tickets = rto.BuyTickets(ticketsAmount);
+            vector<Ticket*> tickets = rto.BuyTickets();
             if (tickets.empty()) {
                 std::cout << "You haven't bought any tickets lol\n";
                 continue;
@@ -191,8 +230,7 @@ int main() {
             break;
         }
         case 1: { // Reserve Tickets
-            uint16_t ticketsAmount = input<uint16_t>("Enter amount of tickets that you want to reserve");
-            vector<Ticket*> tickets = rto.ReserveTickets(ticketsAmount);
+            vector<Ticket*> tickets = rto.ReserveTickets();
             if (tickets.empty()) {
                 std::cout << "You haven't reserve any tickets lol\n";
                 continue;
@@ -205,24 +243,11 @@ int main() {
             break;
         }
         case 2: { // Check Seat
-            Ticket* ticket = rto.CheckSeat();
-            if (ticket == nullptr) {
-                cout << "You can buy this seat\n";
-                continue;
-            }
-            switch (ticket->GetType()) {
-            case BuyTicket:
-                cout << "This seat is bought\n";
-                break;
-            case ReserveTicket:
-                cout << "This seat is reserved\n";
-                break;
-            }
+            rto.CheckAvailableSeats();
             break;
         }
         case 3: { // Get Tickets by name
-            std::string buyerName = input<std::string>("Enter your name");
-            std::vector<Ticket*> tickets = rto.GetTicketsByName(buyerName);
+            std::vector<Ticket*> tickets = rto.GetTicketsByName();
             if (tickets.empty()) {
                 cout << "No tickets found with that name\n";
                 continue;
@@ -253,8 +278,7 @@ int main() {
             break;
         }
         case 4: { // Cancel Tickets
-            std::string buyerName = input<std::string>("Enter your name");
-            std::vector<Ticket*> canceledTickets = rto.CancelTickets(buyerName);
+            std::vector<Ticket*> canceledTickets = rto.CancelTickets();
             if (canceledTickets.empty()) {
                 cout << "You don't have any tickets!\n";
                 continue;

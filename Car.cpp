@@ -52,11 +52,8 @@ CarType Car::GetType() {
     return type;
 }
 
-Seat* Car::GetSeat(uint16_t idOfSeat) {
-    if (idOfSeat > seats.size() || idOfSeat == 0) {
-        return nullptr;
-    }
-    return seats[idOfSeat - 1];
+std::vector<Seat*> Car::GetSeats() {
+    return seats;
 }
 
 void Car::Print() {
