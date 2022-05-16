@@ -1,7 +1,7 @@
 #include "Seat.h"
 
 Seat::Seat() {}
-Seat::Seat(uint16_t id, CarType carType, SeatType type) : id(id), carType(carType), type(type), isReserved(false), isBought(false), owner("") {}
+Seat::Seat(uint16_t id, CarType carType, SeatType type) : id(id), carType(carType), type(type) {}
 uint16_t Seat::GetId() {
     return id;
 }

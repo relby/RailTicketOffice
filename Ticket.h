@@ -7,6 +7,7 @@
 
 class Ticket {
 private:
+    TicketType type;
     std::string owner;
     std::tm date;
     Train* train;
@@ -15,11 +16,13 @@ private:
     uint16_t price;
 public:
     Ticket();
-    Ticket(std::tm date, std::string buyer, Train* train, Car* car, Seat* seat);
+    Ticket(TicketType type, std::tm date, std::string buyer, Train* train, Car* car, Seat* seat);
+    TicketType GetType();
     std::string GetOwner();
     std::tm GetDate();
     std::string GetDetails();
     Train* GetTrain();
     Car* GetCar();
     Seat* GetSeat();
+    uint16_t GetPrice();
 };

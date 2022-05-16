@@ -40,6 +40,16 @@ std::string trainTypeToString(TrainType type) {
     return "unreachable";
 }
 
+std::string ticketTypeToString(TicketType type) {
+    switch (type) {
+    case BuyTicket:
+        return "Покупка";
+    case ReserveTicket:
+        return "Резервация";
+    }
+    return "unreachable";
+}
+
 std::tm* parseDate(std::string date_str) {
     int pos = date_str.find('/');
     if (pos != 2 || date_str.size() != 5) return nullptr;
@@ -66,10 +76,12 @@ uint16_t chooseOperation() {
     uint16_t input = -1;
     std::cout << "What do you want to do?\n";
     std::cout << "[0]: Buy Tickets\n";
-    std::cout << "[1]: Check Seat\n";
-    std::cout << "[2]: Get Tickets by name\n";
-    std::cout << "[3]: Quit\n";
-    while (!(input >= 0 && input <= 3)) {
+    std::cout << "[1]: Reserve Tickets\n";
+    std::cout << "[2]: Check Seat\n";
+    std::cout << "[3]: Get Tickets by name\n";
+    std::cout << "[4]: Cancel Tickets\n";
+    std::cout << "[5]: Quit\n";
+    while (!(input >= 0 && input <= 5)) {
         std::cin >> input;
     }
     return input;
@@ -122,4 +134,28 @@ std::string generateTicketDetails(TrainType trainType, uint16_t trainId, CarType
     std::string seatIdStr = std::to_string(seatId);
     return trainTypeStr + " #" + trainIdStr + " " + carTypeStr + " Вагон #" +
     carIdStr + " Место #" + seatIdStr;
+}
+
+uint16_t generatePrice(CarType carType, SeatType seatType) {
+    switch (carType) {
+    case Sidyachiy:
+        return 1500;
+    case Platskart: {
+        if (seatType == Upper) {
+            return 3000;
+        } else if (seatType == Lower) {
+            return 2000;
+        }
+    }
+    case Kupe: {
+        if (seatType == Upper) {
+            return 5000;
+        } else if (seatType == Lower) {
+            return 4000;
+        }
+    }
+    case CB:
+        return 7000;
+    }
+    return 10000000000;
 }

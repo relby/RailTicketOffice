@@ -17,3 +17,8 @@ enum TrainType {
     FirmenniyType,
     SkoriyType
 };
+
+enum TicketType {
+    BuyTicket,
+    ReserveTicket
+};

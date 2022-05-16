@@ -1,7 +1,14 @@
 #include "Ticket.h"
+#include <stdint.h>
 
 Ticket::Ticket() {}
-Ticket::Ticket(std::tm date, std::string buyer, Train* train, Car* car, Seat* seat) : date(date), owner(buyer), train(train), car(car), seat(seat) {}
+Ticket::Ticket(TicketType type, std::tm date, std::string buyer, Train* train, Car* car, Seat* seat) : type(type), date(date), owner(buyer), train(train), car(car), seat(seat) {
+    price = generatePrice(car->GetType(), seat->GetType());
+}
+
+TicketType Ticket::GetType() {
+    return type;
+}
 
 std::string Ticket::GetOwner() {
     return owner;
@@ -20,4 +27,8 @@ Car* Ticket::GetCar() {
 }
 Seat* Ticket::GetSeat() {
     return seat;
+}
+
+uint16_t Ticket::GetPrice() {
+    return price;
 }
