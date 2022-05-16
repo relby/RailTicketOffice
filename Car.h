@@ -12,7 +12,6 @@ private:
     std::vector<Seat*> seats;
 public:
     Car(uint16_t id, CarType type);
-
     uint16_t GetId();
     CarType GetType();
     std::vector<Seat*> GetSeats();
