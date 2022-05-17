@@ -191,6 +191,96 @@ std::vector<Ticket*> RailTicketOffice::CancelTickets() {
     }
     return out;
 }
+
+void RailTicketOffice::StartOperations() {
+    bool quit = false;
+    while (!quit) {
+        uint16_t operation = chooseOperation();
+        switch (operation) {
+        case 0: { // Buy Tickets
+            std::vector<Ticket*> tickets = BuyTickets();
+            if (tickets.empty()) {
+                std::cout << "You haven't bought any tickets lol\n";
+                continue;
+            }
+            std::cout << "You successfully bought " << tickets.size() << " tickets:\n";
+            for (size_t i = 0; i < tickets.size(); i++) {
+                Ticket* ticket = tickets[i];
+                std::cout << "    #" << i+1 << " " << ticket->GetPrice()<< "R " << tmToString(ticket->GetDate()) << " " << ticket->GetDetails() << '\n';
+            }
+            break;
+        }
+        case 1: { // Reserve Tickets
+            std::vector<Ticket*> tickets = ReserveTickets();
+            if (tickets.empty()) {
+                std::cout << "You haven't reserve any tickets lol\n";
+                continue;
+            }
+            std::cout << "You successfully reserved " << tickets.size() << " tickets:\n";
+            for (size_t i = 0; i < tickets.size(); i++) {
+                Ticket* ticket = tickets[i];
+                std::cout << "    #" << i+1 << " " << ticket->GetPrice()<< "R " << tmToString(ticket->GetDate()) << " " << ticket->GetDetails() << '\n';
+            }
+            break;
+        }
+        case 2: { // Check Seat
+            CheckAvailableSeats();
+            break;
+        }
+        case 3: { // Get Tickets by name
+            std::vector<Ticket*> tickets = GetTicketsByName();
+            if (tickets.empty()) {
+                std::cout << "No tickets found with that name\n";
+                continue;
+            }
+            std::vector<Ticket*> boughtTickets, reservedTickets;
+            for (Ticket* ticket : tickets) {
+                if (ticket->GetType() == BuyTicket) {
+                    boughtTickets.push_back(ticket);
+                } else if (ticket->GetType() == ReserveTicket) {
+                    reservedTickets.push_back(ticket);
+                }
+            }
+            uint16_t sumPrice = 0;
+            std::cout << tickets[0]->GetOwner() << " has " << tickets.size() << " tickets:\n";
+            if (!boughtTickets.empty()) {
+                std::cout << "  Your bought tickets:\n";
+                for (size_t i = 0; i < boughtTickets.size(); i++) {
+                    Ticket* ticket = tickets[i];
+                    std::cout << "    #" << i+1 << " " << ticket->GetPrice()<< "R " << tmToString(ticket->GetDate()) << " " << ticket->GetDetails() << '\n';
+                    sumPrice += ticket->GetPrice();
+                }
+            }
+            if (!reservedTickets.empty()) {
+                std::cout << "  Your reserved tickets:\n";
+                for (size_t i = 0; i < reservedTickets.size(); i++) {
+                    Ticket* ticket = tickets[i];
+                    std::cout << "    #" << i+1 << " " << ticket->GetPrice()<< "R " << tmToString(ticket->GetDate()) << " " << ticket->GetDetails() << '\n';
+                    sumPrice += ticket->GetPrice();
+                }
+            }
+            std::cout << "Total price: " << sumPrice << " R" << '\n';
+            break;
+        }
+        case 4: { // Cancel Tickets
+            std::vector<Ticket*> canceledTickets = CancelTickets();
+            if (canceledTickets.empty()) {
+                std::cout << "You don't have any tickets!\n";
+                continue;
+            }
+            std::cout << "You canceled " << canceledTickets.size() << " tickets:\n";
+            for (size_t i = 0; i < canceledTickets.size(); i++) {
+                Ticket* ticket = canceledTickets[i];
+                std::cout << "    #" << i+1 << " " << ticket->GetPrice()<< "R " << tmToString(ticket->GetDate()) << " " << ticket->GetDetails() << '\n';
+            }
+            break;
+        }
+        case 5:
+            quit = true;
+        }
+    }
+}
+
 RailTicketOffice::~RailTicketOffice() {
     for (Ticket* ticket : tickets) {
         delete ticket;

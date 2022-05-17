@@ -3,11 +3,11 @@
 std::string carTypeToString(CarType type) {
     switch (type) {
     case Sidyachiy:
-        return "Сидячий";
+        return "Sidyachiy";
     case Platskart:
-        return "Плацкарт";
+        return "Platskart";
     case Kupe:
-        return "Купе";
+        return "Kupe";
     case CB:
         return "СВ";
     }
@@ -17,9 +17,9 @@ std::string carTypeToString(CarType type) {
 std::string seatTypeToString(SeatType type) {
     switch (type) {
     case Upper:
-        return "Верхний";
+        return "Upper";
     case Lower:
-        return "Нижний";
+        return "Lower";
     case None:
         return "";
     }
@@ -29,11 +29,11 @@ std::string seatTypeToString(SeatType type) {
 std::string trainTypeToString(TrainType type) {
     switch (type) {
     case LastochkaType:
-        return "Ласточка";
+        return "Lastochka";
     case FirmenniyType:
-        return "Фирменный";
+        return "Firmenniy";
     case SkoriyType:
-        return "Скорый";
+        return "Skoriy";
     }
     return "unreachable";
 }
@@ -41,9 +41,9 @@ std::string trainTypeToString(TrainType type) {
 std::string ticketTypeToString(TicketType type) {
     switch (type) {
     case BuyTicket:
-        return "Покупка";
+        return "Bought";
     case ReserveTicket:
-        return "Резервация";
+        return "Reserved";
     }
     return "unreachable";
 }
@@ -138,15 +138,15 @@ std::pair<std::string, std::string> getDateRange() {
 }
 
 
-std::string generateTicketDetails(TrainType trainType, uint16_t trainId, CarType carType, uint16_t carId, uint16_t seatId /*SeatType seatType*/ ) {
+std::string generateTicketDetails(TrainType trainType, uint16_t trainId, CarType carType, uint16_t carId, uint16_t seatId, SeatType seatType) {
     // TODO: add SeatType
     std::string trainTypeStr = trainTypeToString(trainType);
     std::string carTypeStr = carTypeToString(carType);
     std::string trainIdStr = std::to_string(trainId);
     std::string carIdStr = std::to_string(carId);
     std::string seatIdStr = std::to_string(seatId);
-    return trainTypeStr + " #" + trainIdStr + " " + carTypeStr + " Вагон #" +
-    carIdStr + " Место #" + seatIdStr;
+    return trainTypeStr + " #" + trainIdStr + " " + carTypeStr + " Car #" +
+    carIdStr + " Seat #" + seatIdStr + (seatTypeToString(seatType) != "" ? (" " + seatTypeToString(seatType)) : "");
 }
 
 uint16_t generatePrice(CarType carType, SeatType seatType) {

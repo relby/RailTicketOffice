@@ -16,7 +16,7 @@ std::tm Ticket::GetDate() {
     return date;
 }
 std::string Ticket::GetDetails() {
-    return generateTicketDetails(train->GetType(), train->GetId(), car->GetType(), car->GetId(), seat->GetId());
+    return generateTicketDetails(train->GetType(), train->GetId(), car->GetType(), car->GetId(), seat->GetId(), seat->GetType());
 }
 Train* Ticket::GetTrain() {
     return train;

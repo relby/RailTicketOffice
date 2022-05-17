@@ -23,7 +23,7 @@ std::string padTo(std::string str, size_t num, char paddingChar);
 std::string tmToString(std::tm tm);
 std::pair<std::string, std::string> getDateRange();
 
-std::string generateTicketDetails(TrainType trainType, uint16_t traindId, CarType carType, uint16_t carId, uint16_t seatId /*SeatType seatType*/ );
+std::string generateTicketDetails(TrainType trainType, uint16_t traindId, CarType carType, uint16_t carId, uint16_t seatId, SeatType seatType);
 uint16_t generatePrice(CarType carType, SeatType seatType);
 
 template <typename T>
